@@ -1,32 +1,28 @@
-const sql = require('mssql');
-require('dotenv').config(); // Optional, if you use .env file
-// SQL Server configuration
-const config = {
-    user: process.env.DB_USER || 'your_username',
-    password: process.env.DB_PASSWORD || 'your_password',
-    server: process.env.DB_SERVER || 'localhost', // e.g., localhost\SQLEXPRESS
-    database: process.env.DB_NAME || 'your_database',
-    options: {
-        encrypt: true, // for Azure, or false for local
-        trustServerCertificate: true // change to false for production
-    },
-    pool: {
-        max: 10,
-        min: 0,
-        idleTimeoutMillis: 30000
+const mysql = require('mysql2/promise');
+require('dotenv').config();
+
+// ✅ Correct way to create pool with mysql2/promise
+const pool = mysql.createPool({
+    host: process.env.DB_SERVER || 'localhost',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_NAME || 'mydb',
+    port:25597,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+});
+
+// Check DB connection on startup
+async function checkDBConnection() {
+    try {
+        // ✅ Use pool.execute instead of pool.getConnection
+        await pool.execute('SELECT 1');
+        console.log('✅ MySQL connected successfully');
+    } catch (err) {
+        console.error('❌ MySQL connection failed:', err.message);
+        process.exit(1);
     }
-};
+}
 
-// Create connection pool
-const poolPromise = new sql.ConnectionPool(config)
-    .connect()
-    .then(pool => {
-        console.log('Connected to SQL Server');
-        return pool;
-    })
-    .catch(err => console.log('Database connection failed:', err));
-
-module.exports = {
-    sql,       // SQL object for queries
-    poolPromise // Promise of connected pool
-};
+module.exports = { pool, checkDBConnection };
