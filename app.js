@@ -1,14 +1,27 @@
 const express = require('express');
+const cors = require('cors');
 require('dotenv').config();
 const { pool, checkDBConnection } = require('./config/db');
 
 const app = express();
+
+// ✅ Fix — remove app.options('*') and just use cors() middleware
+app.use(cors({
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+}));
+
+// ❌ Remove this line — it causes the PathError
+// app.options('*', cors());
+
 app.use(express.json());
 
 // Health check route
 app.get('/health', async (req, res) => {
     try {
-        await pool.query('SELECT 1'); // Lightweight ping
+        await pool.query('SELECT 1');
         res.status(200).json({
             status: 'ok',
             database: 'connected'
@@ -30,7 +43,6 @@ app.use('/api/register', registerRoutes);
 
 const PORT = process.env.PORT || 3001;
 
-// Start server only after DB check
 async function startServer() {
     await checkDBConnection();
     app.listen(PORT, () => {
