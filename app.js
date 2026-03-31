@@ -38,8 +38,10 @@ app.get('/health', async (req, res) => {
 // Routes
 const userRoutes = require('./routes/userRoutes');
 const registerRoutes = require('./routes/registerroutes');
+const doctorRoutes = require('./routes/doctorRoutes');
 app.use('/api/users', userRoutes);
 app.use('/api/register', registerRoutes);
+app.use('/api/doctor', doctorRoutes);
 
 const PORT = process.env.PORT || 3001;
 

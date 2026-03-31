@@ -67,3 +67,59 @@ exports.addUser = async (data) => {
     };
   }
 };
+
+exports.loginUser = async (data) => {
+  try {
+    const { email, phone, password } = data;
+    if (!email  || !password) {
+      return {
+        status: false,
+        message: "Email, phone, and password are required"
+      };
+    }
+
+    // Set OUT parameter first
+    await pool.execute('SET @out_user = 0');
+
+    // Call SP with OUT param
+    const userDetail = await pool.execute(
+      'CALL sp_login_user(?)',
+      [email]
+    );
+
+    // Fetch the OUT parameter value
+    console.log("userDetails", userDetail[0][0])
+
+    if (!userDetail[0][0] || userDetail.length === 0) {
+      return {
+        status: false,
+        message: "Invalid email or phone number"
+      }
+    }
+
+    const user = userDetail[0][0]
+    console.log("user", user)
+    const passwordMatch = await bcrypt.compare(password, user[0].Password);
+    console.log(password, user.password)
+    console.log("passwordMatch", passwordMatch)
+    if (!passwordMatch) {
+      return {
+        status: false,
+        message: "Incorrect password"
+      }
+    } else {
+      return {
+        status: true,
+        message: "Login successful",
+        data: user
+      };
+    }
+  } catch (error) {
+    console.error("Error in loginUser service:", error.message);
+    return {
+      status: false,
+      error: error.message,
+    };
+  }
+
+};
