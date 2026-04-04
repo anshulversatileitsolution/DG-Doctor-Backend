@@ -12,7 +12,7 @@ exports.addUser = async (data) => {
 
     const fname = data.first_name;
     const lname = data.last_name
-    const dob = data.dob
+    const dob = moments.formatDate(data.dob, 'YYYY-MM-DD');
     const gender = data.gender
     const blood_group = data.blood_group
     const user_type = data.user_type

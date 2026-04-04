@@ -10,11 +10,42 @@ const { pool } = require('../config/db');;
 exports.getDoctorDetails = async (doctorCode) => {
   try {
     // Imp   const fname = data.first_name;
-
+    console.log("doctorCode",doctorCode);
+    
     // Call SP with OUT param
    const doctorDetails= await pool.execute(
       'CALL sp_get_doctor_by_doctorCode(?)',
       [doctorCode]
+    );
+    console.log("doctorDetails = ",doctorDetails);
+    
+    // Fetch the OUT parameter value
+    const Doctor = doctorDetails[0][0];
+    console.log("Doctor", Doctor)
+    if (!Doctor || Doctor.length === 0) {
+      throw new Error("No records found for the provided doctor code");
+    }
+    return {
+      status: true,
+      message: "Doctor details retrieved successfully",
+      data: {Doctor },
+    };
+
+  } catch (error) {
+    console.error("Error in getDoctorDetails service:", error.message);
+    throw error;
+  }
+};
+    
+
+exports.getDoctorList = async () => {
+  try {
+    // Imp   const fname = data.first_name;
+
+    // Call SP with OUT param
+   const doctorDetails= await pool.execute(
+      'CALL get_Doctor_list()',
+      []
     );
 
     // Fetch the OUT parameter value
@@ -34,4 +65,3 @@ exports.getDoctorDetails = async (doctorCode) => {
     throw error;
   }
 };
-    

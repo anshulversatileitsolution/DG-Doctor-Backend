@@ -7,5 +7,7 @@ const doctortController = require('../controllers/doctorController');
 // API endpoints
 router.post('/getDoctorDetails', doctortController.getDoctorDetails);
 
+router.get('/getDoctorList', doctortController.getDoctorList);
+
 
 module.exports = router;
