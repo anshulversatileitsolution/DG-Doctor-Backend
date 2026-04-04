@@ -1,27 +1,22 @@
 const express = require('express');
-const cors = require('cors');
 require('dotenv').config();
 const { pool, checkDBConnection } = require('./config/db');
+const cors = require('cors');
 
 const app = express();
 
-// ✅ Fix — remove app.options('*') and just use cors() middleware
+
+
 app.use(cors({
-    origin: 'http://localhost:3000',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    origin: ['http://localhost:3000', 'http://192.168.29.44:3000'],
     credentials: true
 }));
-
-// ❌ Remove this line — it causes the PathError
-// app.options('*', cors());
-
 app.use(express.json());
 
 // Health check route
 app.get('/health', async (req, res) => {
     try {
-        await pool.query('SELECT 1');
+        await pool.query('SELECT 1'); // Lightweight ping
         res.status(200).json({
             status: 'ok',
             database: 'connected'
@@ -38,13 +33,18 @@ app.get('/health', async (req, res) => {
 // Routes
 const userRoutes = require('./routes/userRoutes');
 const registerRoutes = require('./routes/registerroutes');
-const doctorRoutes = require('./routes/doctorRoutes');
+const adminRoutes = require('./routes/adminRoutes')
+app.use('/api/admin', adminRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/register', registerRoutes);
-app.use('/api/doctor', doctorRoutes);
+app.use('/api/patients', require('./routes/patientRoutes'));
+app.use('/api/doctors', require('./routes/doctorRoutes'));
+app.use('/api/appointments', require('./routes/appointmentRoutes'));
+app.use('/api/deprtments', require('./routes/departmentRoutes'));
 
 const PORT = process.env.PORT || 3001;
 
+// Start server only after DB check
 async function startServer() {
     await checkDBConnection();
     app.listen(PORT, () => {
