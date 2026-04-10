@@ -1,0 +1,56 @@
+Payloads for Update and insert prescriptions
+
+---------------------    Payload for update----------------------
+
+ 
+
+{AppointmentID: "1",DoctorID: 1,LABTID: 1,LabTests: "CBC\nUltrasound",
+
+
+Medicines: "Paracetamol 500mg — Twice daily — After food — 5 days\nAmoxicillin 250mg — Thrice daily — With food — 7 days\nOMEZ250mg — Thrice daily — Without food — 7 days",
+
+
+PrescriptionID: 1}
+
+ 
+
+---------------------  Payload for Insert ------------------------
+
+ 
+
+{AppointmentID: "16",DoctorID: 1,LABTID: "",LabTests: "",Medicines: "",PrescriptionID: ""}
+
+ 
+ 
+Logo
+ 	
+Anshul Agarwal
+Sr. Software Developer
+Versatile Prime Infosoft Pvt. Ltd.
+Email: anshul.agarwal@versatileitsolution.com
+Phone: +91 86603 30457
+Web: www.versatileitsolution.com
+ 
+From: "anshul.agarwal@versatileitsolution.com" <anshul.agarwal@versatileitsolution.com>
+Sent: Thursday, April 9, 2026 10:20 AM
+To: kaushit.tejwani@versatileitsolution.com
+Cc: hrexecutive@versatileitsolution.com, info@versatileitsolution.com
+Subject: Kaushit Today Task
+ 
+Hi Kaushit,
+ 
+Today Task :
+1) Get Appointment api to get all list
+2) Update Labtest and Prescription Api
+ 
+Thanks and regards
+ 
+ 
+Logo
+ 	
+Anshul Agarwal
+Sr. Software Developer
+Versatile Prime Infosoft Pvt. Ltd.
+Email: anshul.agarwal@versatileitsolution.com
+Phone: +91 86603 30457
+Web: www.versatileitsolution.com

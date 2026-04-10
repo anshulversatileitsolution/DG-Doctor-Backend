@@ -9,5 +9,11 @@ router.post('/getDoctorDetails', doctortController.getDoctorDetails);
 
 router.get('/getDoctorList', doctortController.getDoctorList);
 
+router.post('/addDoctor', doctortController.addDoctor);
+
+router.post('/updateDoctor', doctortController.updateDoctor);
+
+router.post('/deleteDoctor', doctortController.deleteDoctor);
+
 
 module.exports = router;
